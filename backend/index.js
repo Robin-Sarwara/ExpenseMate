@@ -11,7 +11,7 @@ const useData = require("./Routes/UserData")
 const expense = require("./Routes/Expense")
 
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: ['http://localhost:5173', 'https://expensemateee.netlify.app'], // Allow local and Netlify frontend
   credentials: true
 }));
 
