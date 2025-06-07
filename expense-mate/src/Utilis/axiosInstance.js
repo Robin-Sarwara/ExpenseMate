@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/api', // Fixed: Changed from 5000 to 8080
+    baseURL,
     headers:{
         'Content-Type': 'application/json',
     },
@@ -27,17 +29,16 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    // Only try to refresh if accessToken existed before
     const accessToken = localStorage.getItem('accessToken');
     if (
       (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
-      accessToken // Only refresh if there was a token
+      accessToken
     ) {
       originalRequest._retry = true;
       try {
-        const response = await axios.put('http://localhost:8080/api/refresh-token', {}, {
+        const refreshUrl = `${baseURL.replace(/\/$/, '')}/refresh-token`;
+        const response = await axios.put(refreshUrl, {}, {
           withCredentials: true,
         });
         const { accessToken: newToken } = response.data;
