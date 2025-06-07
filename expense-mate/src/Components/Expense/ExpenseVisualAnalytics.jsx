@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import axiosInstance from '../../Utilis/axiosInstance';
+import Spinner from '../../Utilis/loading';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28CFE', '#FF6699', '#FFB347', '#B0E57C', '#FF6666', '#66B3FF', '#C2C2F0', '#FFB6C1'];
 
@@ -58,6 +59,7 @@ const ExpenseVisualAnalytics = () => {
   const years = Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - i);
 
   return (
+    <>{loading&&<Spinner/>}
     <div className="w-full min-h-[700px] bg-white rounded-xl shadow p-6 flex flex-col gap-10">
       <h2 className="text-2xl font-bold mb-2 text-center">Expense Visual Analytics</h2>
       <div className="flex flex-wrap gap-4 justify-center mb-6">
@@ -177,6 +179,7 @@ const ExpenseVisualAnalytics = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 
