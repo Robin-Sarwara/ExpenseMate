@@ -140,7 +140,7 @@ const Navbar = () => {
               <span>Home</span>
             </Link>
             <Link
-              to='/expenses'
+              to='/expenses/report'
               className='flex items-center space-x-3 px-3 py-2 rounded-md text-gray-600 hover:text-blue-500 hover:bg-gray-50 transition-colors'
               onClick={toggleMobileMenu}
             >
@@ -148,20 +148,12 @@ const Navbar = () => {
               <span>Expenses</span>
             </Link>
             <Link
-              to='/analytics'
+              to='/expense/analytics'
               className='flex items-center space-x-3 px-3 py-2 rounded-md text-gray-600 hover:text-blue-500 hover:bg-gray-50 transition-colors'
               onClick={toggleMobileMenu}
             >
               <span className='text-lg'>📊</span>
               <span>Analytics</span>
-            </Link>
-            <Link
-              to='/reports'
-              className='flex items-center space-x-3 px-3 py-2 rounded-md text-gray-600 hover:text-blue-500 hover:bg-gray-50 transition-colors'
-              onClick={toggleMobileMenu}
-            >
-              <span className='text-lg'>📄</span>
-              <span>Reports</span>
             </Link>
           </div>
         </div>

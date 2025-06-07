@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axiosInstance from "../../Utilis/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../../Utilis/toastMessage";
 
 const categories = [
   "Food & Dining",
@@ -88,7 +89,7 @@ const AddExpense = ({ onExpenseAdded }) => {
         expenseDate: form.expenseDate ? new Date(form.expenseDate).toISOString() : undefined,
       };
       const res = await axiosInstance.post("/add/expense", payload);
-      setSuccess("Expense added successfully!");
+      showSuccessToast("Expense added successfully!");
       setForm({
         amount: "",
         description: "",
@@ -100,9 +101,7 @@ const AddExpense = ({ onExpenseAdded }) => {
       if (onExpenseAdded) onExpenseAdded(res.data.expense);
       navigate("/home")
     } catch (err) {
-      setApiError(
-        err.response?.data?.message || "Failed to add expense. Please try again."
-      );
+      showErrorToast(err?.response?.data?.message || "An error occured while adding expense")
     } finally {
       setLoading(false);
     }
