@@ -1,5 +1,5 @@
 const User = require("../Models/user");
-const Expense = require("../Models/expense");
+const Expense = require("../Models/Expense");
 const e = require("express");
 
 const addExpense = async (req, res) => {
