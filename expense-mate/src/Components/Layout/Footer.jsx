@@ -111,7 +111,7 @@ const Footer = () => {
             
             {/* Copyright */}
             <div className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} ExpenseMate. All rights reserved. 
+              © {new Date().toLocaleString(undefined, { year: 'numeric', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone })} ExpenseMate. All rights reserved. 
               <span className="ml-2">Made with ❤️ for better financial management.</span>
             </div>
             

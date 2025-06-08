@@ -93,15 +93,22 @@ const deleteExpense = async (req, res) => {
     }
 
     // Period filter logic
-    const { period, year, month } = req.query;
+    const { period, year, month, tz } = req.query;
+    const userTimeZone = tz || 'UTC';
     let filter = { userId };
     if (period) {
-      const now = new Date();
+      const now = tz ? new Date(new Date().toLocaleString('en-US', { timeZone: userTimeZone })) : new Date();
       let start, end;
       switch (period) {
         case 'today':
-          start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-          end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+          if (tz) {
+            const localNow = new Date(new Date().toLocaleString('en-US', { timeZone: userTimeZone }));
+            start = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate());
+            end = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate() + 1);
+          } else {
+            start = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+            end = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+          }
           break;
         case 'week':
           if (req.query.year !== undefined && req.query.week !== undefined) {

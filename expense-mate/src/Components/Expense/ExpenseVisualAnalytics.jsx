@@ -5,7 +5,10 @@ import Spinner from '../../Utilis/loading';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28CFE', '#FF6699', '#FFB347', '#B0E57C', '#FF6666', '#66B3FF', '#C2C2F0', '#FFB6C1'];
 
-const getMonthName = (month) => new Date(2000, month - 1, 1).toLocaleString('default', { month: 'long' });
+const getMonthName = (month) => {
+  // Use user's local time zone for month name
+  return new Date(2000, month - 1, 1).toLocaleString(undefined, { month: 'long', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+};
 
 const ExpenseVisualAnalytics = () => {
   const [categoryData, setCategoryData] = useState([]);
@@ -14,18 +17,19 @@ const ExpenseVisualAnalytics = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [compareMonth, setCompareMonth] = useState(new Date().getMonth());
+  const [compareMonth, setCompareMonth] = useState(new Date().getMonth() + 1);
   const [compareYear, setCompareYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         // Current selected month expenses by category
-        const monthRes = await axiosInstance.get(`/get/expense?period=month&year=${selectedYear}&month=${selectedMonth}`);
-        const compareRes = await axiosInstance.get(`/get/expense?period=month&year=${compareYear}&month=${compareMonth}`);
-        const yearRes = await axiosInstance.get(`/get/expense?period=year&year=${selectedYear}`);
-        const prevYearRes = await axiosInstance.get(`/get/expense?period=year&year=${compareYear}`);
+        const monthRes = await axiosInstance.get(`/get/expense?period=month&year=${selectedYear}&month=${selectedMonth}&tz=${encodeURIComponent(tz)}`);
+        const compareRes = await axiosInstance.get(`/get/expense?period=month&year=${compareYear}&month=${compareMonth}&tz=${encodeURIComponent(tz)}`);
+        const yearRes = await axiosInstance.get(`/get/expense?period=year&year=${selectedYear}&tz=${encodeURIComponent(tz)}`);
+        const prevYearRes = await axiosInstance.get(`/get/expense?period=year&year=${compareYear}&tz=${encodeURIComponent(tz)}`);
         // Group by category for selected and compare month
         const groupByCategory = (expenses) => {
           const grouped = {};

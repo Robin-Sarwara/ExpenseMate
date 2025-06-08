@@ -22,6 +22,7 @@ const ExpenseReport = () => {
   const menuRef = useRef();
 
   const navigate = useNavigate();
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   // Helper to get period and params for API
   const getApiParams = () => {
@@ -60,7 +61,7 @@ const ExpenseReport = () => {
       const query = Object.entries(params)
         .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
         .join('&');
-      const res = await axiosInstance.get(`/get/expense?${query}`);
+      const res = await axiosInstance.get(`/get/expense?${query}&tz=${encodeURIComponent(tz)}`);
       setExpenses(res.data.expenses || []);
     } catch (err) {
       setError('Failed to fetch expenses.');
@@ -221,7 +222,7 @@ const ExpenseReport = () => {
 
     const tableColumn = ["Date", "Category", "Description", "Amount", "Payment"];
     const tableRows = expenses.map(exp => [
-      exp.expenseDate ? new Date(exp.expenseDate).toLocaleDateString() : "",
+      exp.expenseDate ? new Date(exp.expenseDate).toLocaleDateString(undefined, { timeZone: tz }) : "",
       exp.category,
       exp.description,
       `$${exp.amount}`,
@@ -300,7 +301,7 @@ const ExpenseReport = () => {
                   <tbody>
                     {expenses.map(exp => (
                       <tr key={exp._id} className="border-b last:border-b-0">
-                        <td className="py-2 px-4">{exp.expenseDate ? new Date(exp.expenseDate).toLocaleDateString() : ''}</td>
+                        <td className="py-2 px-4">{exp.expenseDate ? new Date(exp.expenseDate).toLocaleDateString(undefined, { timeZone: tz }) : ''}</td>
                         <td className="py-2 px-4">{exp.category}</td>
                         <td className="py-2 px-4">{exp.description}</td>
                         <td className="py-2 px-4 font-semibold text-blue-700">${exp.amount}</td>

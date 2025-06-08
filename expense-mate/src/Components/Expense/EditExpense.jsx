@@ -15,6 +15,9 @@ const categories = [
   "Business",
   "Technology",
   "Personal",
+  "Gas",
+  "Groceries",
+  "Car Expense",
   "Home & Living",
   "Other",
 ];
@@ -56,7 +59,8 @@ const EditExpense = () => {
           amount: expense.amount || "",
           description: expense.description || "",
           category: expense.category || "Other",
-          expenseDate: expense.expenseDate ? expense.expenseDate.slice(0, 10) : "",
+          // Convert UTC date string to local date string for display
+          expenseDate: expense.expenseDate ? new Date(expense.expenseDate).toLocaleString().slice(0, 10) : "",
           paymentMethod: expense.paymentMethod || "Cash",
           notes: expense.notes || "",
         });
@@ -109,7 +113,8 @@ const EditExpense = () => {
       const payload = {
         ...form,
         amount: Number(form.amount),
-        expenseDate: form.expenseDate ? new Date(form.expenseDate).toISOString() : undefined,
+        // Always store/send date as UTC (ISO string)
+        expenseDate: form.expenseDate ? new Date(form.expenseDate + 'T00:00:00Z').toISOString() : undefined,
       };
       await axiosInstance.put(`/update/expense/${id}`, payload);
       setSuccess("Expense updated successfully!");
@@ -203,7 +208,7 @@ const EditExpense = () => {
             type="date"
             id="expenseDate"
             name="expenseDate"
-            value={form.expenseDate}
+            value={form.expenseDate ? new Date(form.expenseDate).toLocaleDateString('en-CA', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : ''}
             onChange={handleChange}
             className="px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none text-base w-full transition"
           />

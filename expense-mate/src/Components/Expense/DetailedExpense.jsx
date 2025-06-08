@@ -39,9 +39,9 @@ const DetailedExpense = () => {
           <div><span className="font-semibold text-gray-700">Category:</span> {expense.category}</div>
           <div><span className="font-semibold text-gray-700">Description:</span> {expense.description}</div>
           <div><span className="font-semibold text-gray-700">Payment Method:</span> {expense.paymentMethod}</div>
-          <div><span className="font-semibold text-gray-700">Expense Date:</span> {expense.expenseDate ? new Date(expense.expenseDate).toLocaleString() : ''}</div>
-          <div><span className="font-semibold text-gray-700">Created At:</span> {expense.createdAt ? new Date(expense.createdAt).toLocaleString() : ''}</div>
-          <div><span className="font-semibold text-gray-700">Last Updated:</span> {expense.updatedAt ? new Date(expense.updatedAt).toLocaleString() : ''}</div>
+          <div><span className="font-semibold text-gray-700">Expense Date:</span> {expense.expenseDate ? new Date(expense.expenseDate).toLocaleString(undefined, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : ''}</div>
+          <div><span className="font-semibold text-gray-700">Created At:</span> {expense.createdAt ? new Date(expense.createdAt).toLocaleString(undefined, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : ''}</div>
+          <div><span className="font-semibold text-gray-700">Last Updated:</span> {expense.updatedAt ? new Date(expense.updatedAt).toLocaleString(undefined, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) : ''}</div>
           {expense.notes && <div><span className="font-semibold text-gray-700">Notes:</span> {expense.notes}</div>}
         </div>
         <div className="flex justify-between mt-6">

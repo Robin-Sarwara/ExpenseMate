@@ -25,11 +25,13 @@ const Home = () => {
   const { summary } = useExpenseSummary();
   const { analytics } = usePeriodAnalytics();
 
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const fetchExpenseData = async () => {
     setLoading(true);
     try {
       // Fetch only today's expenses using the period query param
-      const response = await axiosInstance.get('/get/expense?period=today');
+      const response = await axiosInstance.get(`/get/expense?period=today&tz=${encodeURIComponent(tz)}`);
       setTodayExpenses(response.data.expenses || []);
     } catch (error) {
       setTodayExpenses([]);
@@ -80,6 +82,9 @@ const Home = () => {
     Business: '💼',
     Technology: '💻',
     Personal: '👤',
+    'Gas': '⛽',
+    'Groceries': '🛒',
+    'Car Expense': '🚙',
     'Home & Living': '🏠',
     Other: '🔖',
   };
@@ -266,6 +271,7 @@ const Home = () => {
                               month: 'short',
                               day: 'numeric',
                               year: 'numeric',
+                              timeZone: tz
                             })
                           : ''}
                       </span>
@@ -286,7 +292,7 @@ const Home = () => {
                       <span className="text-xs text-gray-500">
                         Created:{' '}
                         <span className="font-medium text-gray-700">
-                          {expense.createdAt ? new Date(expense.createdAt).toLocaleString() : ''}
+                          {expense.createdAt ? new Date(expense.createdAt).toLocaleString(undefined, { timeZone: tz }) : ''}
                         </span>
                       </span>
                     </div>

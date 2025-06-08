@@ -15,6 +15,9 @@ const categories = [
   "Business",
   "Technology",
   "Personal",
+  "Gas",
+  "Groceries",
+  "Car Expense",
   "Home & Living",
   "Other",
 ];
@@ -86,7 +89,8 @@ const AddExpense = ({ onExpenseAdded }) => {
       const payload = {
         ...form,
         amount: Number(form.amount),
-        expenseDate: form.expenseDate ? new Date(form.expenseDate).toISOString() : undefined,
+        // Always store/send date as UTC (ISO string)
+        expenseDate: form.expenseDate ? new Date(form.expenseDate + 'T00:00:00Z').toISOString() : undefined,
       };
       const res = await axiosInstance.post("/add/expense", payload);
       showSuccessToast("Expense added successfully!");

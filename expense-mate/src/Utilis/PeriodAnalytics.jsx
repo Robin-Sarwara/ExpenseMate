@@ -18,6 +18,7 @@ export const PeriodAnalyticsProvider = ({ children }) => {
         week: { current: 0, previous: 0, percentChange: 0 },
     });
     const { setLoading } = useGlobalLoading();
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const getPeriodAnalytics = async () => {
         setLoading(true);
@@ -30,12 +31,12 @@ export const PeriodAnalyticsProvider = ({ children }) => {
                 weekRes,
                 lastWeekRes
             ] = await Promise.all([
-                axiosInstance.get('/get/expense?period=month'),
-                axiosInstance.get('/get/expense?period=lastMonth'),
-                axiosInstance.get('/get/expense?period=year'),
-                axiosInstance.get('/get/expense?period=lastYear'),
-                axiosInstance.get('/get/expense?period=week'),
-                axiosInstance.get('/get/expense?period=lastWeek')
+                axiosInstance.get(`/get/expense?period=month&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=lastMonth&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=year&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=lastYear&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=week&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=lastWeek&tz=${encodeURIComponent(tz)}`)
             ]);
 
             // Helper to handle 404 or failed responses gracefully

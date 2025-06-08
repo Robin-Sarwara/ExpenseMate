@@ -15,14 +15,15 @@ export const ExpenseSummaryProvider = ({ children }) => {
         year: 0
     });
     const { setLoading } = useGlobalLoading();
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const getExpenseSummary = async () => {
         setLoading(true);
         try {
             const [weekRes, monthRes, yearRes] = await Promise.all([
-                axiosInstance.get('/get/expense?period=week'),
-                axiosInstance.get('/get/expense?period=month'),
-                axiosInstance.get('/get/expense?period=year'),
+                axiosInstance.get(`/get/expense?period=week&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=month&tz=${encodeURIComponent(tz)}`),
+                axiosInstance.get(`/get/expense?period=year&tz=${encodeURIComponent(tz)}`),
             ]);
             console.log("Week Expenses:", weekRes.data.expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0),);
             console.log("Month Expenses:", monthRes.data.expenses); 
